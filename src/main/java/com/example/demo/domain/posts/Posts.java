@@ -1,6 +1,7 @@
 package com.example.demo.domain.posts;
 
 
+import com.example.demo.domain.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,7 +11,8 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @Builder
-public class Posts extends BaseTimeEntity{
+@Table(name = "Posts")
+public class Posts extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

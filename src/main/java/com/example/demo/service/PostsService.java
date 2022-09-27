@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.posts.Posts;
 import com.example.demo.domain.posts.PostsRepository;
-import com.example.demo.web.dto.PostsListResDto;
-import com.example.demo.web.dto.PostsResDto;
-import com.example.demo.web.dto.PostsSaveReqDto;
-import com.example.demo.web.dto.PostsUpdateReqDto;
+import com.example.demo.web.dto.PostsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,30 +16,30 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional
-    public Long save(PostsSaveReqDto reqDto) {
+    public Long save(PostsDto reqDto) {
         postsRepository.save(reqDto.toEntity());
         return reqDto.toEntity().getId();
     }
 
     @Transactional
-    public Long update(Long id, PostsUpdateReqDto reqDto) {
+    public Long update(Long id, PostsDto reqDto) {
         Posts posts = postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 없습니다. id = " +id));
         posts.update(reqDto.getTitle(), reqDto.getContent());
 
         return id;
     }
-    public PostsResDto findById(Long id) {
+    public PostsDto findById(Long id) {
         Posts entity = postsRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 없습니다. id = " +id));
 
-        return new PostsResDto(entity);
+        return new PostsDto(entity);
     }
 
     @Transactional(readOnly = true)
-    public List<PostsListResDto> findAll(){
+    public List<PostsDto> findAll(){
         return postsRepository.findAll().stream()
-                .map(PostsListResDto::new)
+                .map(PostsDto::new)
                 .collect(Collectors.toList());
     }
     @Transactional
