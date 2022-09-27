@@ -1,6 +1,6 @@
 package com.example.demo.web;
 
-import com.example.demo.domain.posts.PostsResDto;
+import com.example.demo.web.dto.PostsResDto;
 import com.example.demo.service.PostsService;
 import com.example.demo.web.dto.PostsSaveReqDto;
 import com.example.demo.web.dto.PostsUpdateReqDto;
@@ -14,7 +14,6 @@ public class PostsController {
 
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody  PostsSaveReqDto reqDto) {
-        System.out.println(reqDto.toString());
         return postsService.save(reqDto);
     }
 
@@ -26,6 +25,12 @@ public class PostsController {
     @GetMapping("/api/v1/posts/{id}")
     public PostsResDto findById (@PathVariable Long id) {
         return postsService.findById(id);
+    }
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id) {
+        postsService.delete(id);
+        return id;
     }
 
 }

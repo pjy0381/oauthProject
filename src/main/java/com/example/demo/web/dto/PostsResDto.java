@@ -1,5 +1,6 @@
-package com.example.demo.domain.posts;
+package com.example.demo.web.dto;
 
+import com.example.demo.domain.posts.Posts;
 import lombok.Getter;
 
 @Getter
