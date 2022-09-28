@@ -1,7 +1,7 @@
-package com.example.demo.config.auth.dto;
+package com.example.demo.security.oauth.user;
 
-import com.example.demo.domain.user.Role;
-import com.example.demo.domain.user.User;
+import com.example.demo.common.Role;
+import com.example.demo.dto.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

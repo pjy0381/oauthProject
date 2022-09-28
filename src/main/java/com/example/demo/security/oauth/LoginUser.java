@@ -1,4 +1,4 @@
-package com.example.demo.config.auth;
+package com.example.demo.security.oauth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

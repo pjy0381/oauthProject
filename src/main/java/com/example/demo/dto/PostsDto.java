@@ -1,6 +1,6 @@
-package com.example.demo.web.dto;
+package com.example.demo.dto;
 
-import com.example.demo.domain.posts.Posts;
+import com.example.demo.dto.Posts;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

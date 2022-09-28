@@ -1,7 +1,7 @@
-package com.example.demo.domain.posts;
+package com.example.demo.dto;
 
 
-import com.example.demo.domain.BaseTimeEntity;
+import com.example.demo.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,7 @@
-package com.example.demo.domain.user;
+package com.example.demo.dto;
 
-import com.example.demo.domain.BaseTimeEntity;
+import com.example.demo.common.BaseTimeEntity;
+import com.example.demo.common.Role;
 import lombok.*;
 
 import javax.persistence.*;

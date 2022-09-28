@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.posts.Posts;
-import com.example.demo.domain.posts.PostsRepository;
-import com.example.demo.web.dto.PostsDto;
+import com.example.demo.dto.Posts;
+import com.example.demo.repository.PostsRepository;
+import com.example.demo.dto.PostsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
