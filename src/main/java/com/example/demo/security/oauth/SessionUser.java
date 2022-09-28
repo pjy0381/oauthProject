@@ -1,7 +1,7 @@
-package com.example.demo.security.oauth.user;
+package com.example.demo.security.oauth;
 
-import com.example.demo.dto.User;
-import lombok.Getter;
+import com.example.demo.entity.User;
+import lombok.*;
 
 import java.io.Serializable;
 @Getter

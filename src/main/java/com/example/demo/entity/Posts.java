@@ -1,8 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.entity;
 
 
 import com.example.demo.common.BaseTimeEntity;
 import lombok.*;
+import org.springframework.boot.context.properties.bind.Name;
 
 import javax.persistence.*;
 

@@ -1,6 +1,5 @@
 package com.example.demo.security.oauth;
 
-import com.example.demo.security.oauth.user.SessionUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

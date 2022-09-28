@@ -1,11 +1,12 @@
-package com.example.demo.security.oauth;
+package com.example.demo.service;
 
+import com.example.demo.entity.User;
+import com.example.demo.security.oauth.SessionUser;
 import com.example.demo.security.oauth.user.OAuthAttributes;
-import com.example.demo.security.oauth.user.SessionUser;
-import com.example.demo.dto.User;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -16,12 +17,15 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.UUID;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
+    PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -42,9 +46,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
+        String uuid = UUID.randomUUID().toString().substring(0, 6);
+        String password = "dsadas"+uuid;
+        System.out.println(password);
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
-                .orElse(attributes.toEntity());
+                .map(entity -> entity.update(attributes.getName(), password, passwordEncoder))
+                .orElse(attributes.toEntity(password,passwordEncoder));
 
         return userRepository.save(user);
     }

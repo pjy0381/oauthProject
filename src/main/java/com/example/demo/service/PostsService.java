@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.Posts;
+import com.example.demo.entity.Posts;
 import com.example.demo.repository.PostsRepository;
 import com.example.demo.dto.PostsDto;
 import lombok.RequiredArgsConstructor;

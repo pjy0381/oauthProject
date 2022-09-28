@@ -1,8 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.entity;
 
 import com.example.demo.common.BaseTimeEntity;
 import com.example.demo.common.Role;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -16,7 +17,8 @@ public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column
+    private String password;
     @Column(nullable = false)
     private String name;
 
@@ -31,14 +33,19 @@ public class User extends BaseTimeEntity {
     private Role role;
 
 
-    public User update(String name, String picture) {
+    public User update(String name, String password, PasswordEncoder passwordEncode) {
+        System.out.println(password);
         this.name = name;
-        this.picture = picture;
+        this.password = passwordEncode.encode(password);
 
         return this;
     }
 
     public String getRoleKey() {
         return this.role.getKey();
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
     }
 }
