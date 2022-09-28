@@ -1,10 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.dto.Posts;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class PostsDto {
     private Long id;
     private String title;
@@ -23,6 +21,7 @@ public class PostsDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.author = entity.getAuthor();
+        this.content = entity.getContent();
         this.createdDate = entity.getCreatedDate();
 
     }

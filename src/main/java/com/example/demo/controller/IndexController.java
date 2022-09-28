@@ -35,7 +35,7 @@ public class IndexController {
     public String postsUpdate(@PathVariable Long id, Model model) {
         PostsDto dto = postsService.findById(id);
         model.addAttribute("post", dto);
-
+        System.out.println(dto.toString()+"zzzzzzzzzzzzzzz");
         return "posts-update";
     }
 }
