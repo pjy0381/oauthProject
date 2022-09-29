@@ -1,50 +1,43 @@
 package com.example.demo.security.jwt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.demo.dto.UserDto;
+import com.example.demo.service.TokenService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 
-public class JwtFilter extends GenericFilterBean {
-    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+@RequiredArgsConstructor
+public class JwtFilter extends GenericFilter {
+    private final TokenService tokenService;
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
-    private TokenProvider tokenProvider;
-
-    public JwtFilter(TokenProvider tokenProvider){
-        this.tokenProvider = tokenProvider;
-    }
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String jwt = resolveToken(httpServletRequest);
-        String requestURI = httpServletRequest.getRequestURI();
+        String token = ((HttpServletRequest)request).getHeader("Auth");
 
-        if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)){
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}",authentication.getName(),requestURI);
-        }else {
-            logger.debug("유효한 JWT 토큰이 없습니다. uri:{}",requestURI);
+        if (token != null && tokenService.verifyToken(token)) {
+            String email = tokenService.getUid(token);
+
+            UserDto userDto = UserDto.builder()
+                    .email(email)
+                    .name("이름이에용")
+                    .picture("프로필 이미지에요").build();
+
+            Authentication auth = getAuthentication(userDto);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
-        chain.doFilter(request,response);
+        chain.doFilter(request, response);
     }
 
-    private String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer "))
-            return bearerToken.substring(7);
-        return null;
+    public Authentication getAuthentication(UserDto member) {
+        return new UsernamePasswordAuthenticationToken(member, "",
+                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

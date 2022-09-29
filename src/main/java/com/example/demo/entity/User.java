@@ -33,10 +33,9 @@ public class User extends BaseTimeEntity {
     private Role role;
 
 
-    public User update(String name, String password, PasswordEncoder passwordEncode) {
-        System.out.println(password);
+    public User update(String name, String password) {
         this.name = name;
-        this.password = passwordEncode.encode(password);
+        this.password = password;
 
         return this;
     }
