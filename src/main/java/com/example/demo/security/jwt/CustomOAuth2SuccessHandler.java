@@ -4,6 +4,7 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.entity.Token;
 import com.example.demo.security.oauth.UserRequestMapper;
 import com.example.demo.service.TokenService;
+import com.example.demo.utils.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final TokenService tokenService;
     private final UserRequestMapper userRequestMapper;
-    private final ObjectMapper objectMapper;
+    private final CookieUtils cookieUtils;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -32,11 +33,10 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         Token token = tokenService.generateToken(userDto.getEmail(), "USER");
         log.info("{}", token);
-        String targetUrl;
-        targetUrl = UriComponentsBuilder.fromUriString("/")
-                .queryParam("token", "token")
-                .build().toUriString();
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+        response.addCookie(cookieUtils.generateJwtHttpOnlyCookie("refreshToken",token.getRefreshToken(),60*60*24));
+        response.addCookie(cookieUtils.generateJwtHttpOnlyCookie("accessToken",token.getToken(),60*30));
+        response.sendRedirect("/");
     }
 
 }

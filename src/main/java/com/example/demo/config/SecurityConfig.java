@@ -26,6 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomOAuth2UserService oAuth2UserService;
     private final CustomOAuth2SuccessHandler successHandler;
+    private final CustomLogoutSuccessHandler successLogoutHandler;
+
     private final TokenService tokenService;
 
     @Override
@@ -46,8 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/token/**","/").permitAll()
+                .antMatchers("/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
+                .antMatchers("/token/**","/","/posts/*").permitAll()
+                .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated()
+
+                .and()
+                .logout()
+                .logoutSuccessHandler(successLogoutHandler)
 
                 .and()
                 .addFilterBefore(new JwtFilter(tokenService),
