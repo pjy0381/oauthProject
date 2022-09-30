@@ -3,6 +3,7 @@ package com.example.demo.security.oauth;
 import com.example.demo.common.Role;
 import com.example.demo.entity.User;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 
@@ -12,6 +13,7 @@ import java.util.*;
 @Builder
 public class OAuthAttributes {
     private Map<String, Object> attributes;
+    @Value("${jwt.secret    }")
     private String attributeKey;
     private String email;
     private String name;

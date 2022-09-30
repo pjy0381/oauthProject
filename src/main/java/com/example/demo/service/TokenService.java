@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +14,8 @@ import java.util.Date;
 
 @Service
 public class TokenService {
-    private String secretKey = "sdfkljngkljdvklsnklndvsklnsdvjvuiaesiclnlcjscsl;skl;asbklvnsvajlnlasv";
+    @Value("${jwt.secret}")
+    private String secretKey ;
 
     @PostConstruct
     protected void init() {
@@ -21,7 +23,7 @@ public class TokenService {
     }
 
     public Token generateToken(String uid, String role) {
-        long tokenPeriod = 1000L * 60L * 10L;
+        long tokenPeriod = 1000L * 60L;
         long refreshPeriod = 1000L * 60L * 60L * 24L * 30L * 3L;
 
         Claims claims = Jwts.claims().setSubject(uid);
@@ -41,6 +43,21 @@ public class TokenService {
                         .setExpiration(new Date(now.getTime() + refreshPeriod))
                         .signWith(SignatureAlgorithm.HS256, secretKey)
                         .compact());
+    }
+
+    public Token generateAccessToken(String refreshToken) {
+        long tokenPeriod = 1000L * 60L * 10L;
+
+        Claims claims = Jwts.claims();
+
+        Date now = new Date();
+        return new Token(
+                Jwts.builder()
+                        .setClaims(claims)
+                        .setIssuedAt(now)
+                        .setExpiration(new Date(now.getTime() + tokenPeriod))
+                        .signWith(SignatureAlgorithm.HS256, secretKey)
+                        .compact(),refreshToken);
     }
 
     public boolean verifyToken(String token) {
